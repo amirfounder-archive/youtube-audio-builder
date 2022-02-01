@@ -24,9 +24,15 @@ def run_video_downloads() -> None:
             error_message = 'Connection error! - URL: %s' % url
             print(error_message)
             continue
-
-        streams = list(yt.streams.filter(
-            only_audio=True, file_extension='mp4'))
+        
+        try:
+            streams = yt.streams
+        except:
+            error_message = 'Connection error! - URL: %s' % url
+            print(error_message)
+            continue
+        
+        streams = list(streams.filter(only_audio=True, file_extension='mp4'))
 
         if len(streams) == 0:
             error_message = 'Could not find streams for URL: %s' % url
@@ -64,3 +70,7 @@ def run_video_to_audio_conversion() -> None:
         audio_clip = AudioFileClip('videos/{}'.format(video))
         audio_clip.write_audiofile(output_name)
         audio_clip.close()
+
+
+if __name__ == '__main__':
+    main()
